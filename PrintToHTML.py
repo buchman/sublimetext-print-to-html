@@ -16,6 +16,8 @@ import pygments
 import pygments.formatters
 import pygments.lexers
 
+from subprocess import call
+
 #WORD_WRAP_SCRIPT_BLOCK = '\n'.join(['<script>', sublime.load_resource('Packages/sublimetext-print-to-html/wordwrap.js'), '</script>'])
 
 class PrintToHtmlCommand(sublime_plugin.TextCommand):
@@ -128,7 +130,7 @@ class PrintToHtmlCommand(sublime_plugin.TextCommand):
 
         # show html in browser or new buffer
         if target == 'browser':
-            send_to_browser(html)
+            send_to_browser(html, settings.get('browser'))
         elif target == 'sublime':
             send_to_new_buffer(self.view, html)
         else:
@@ -156,12 +158,15 @@ def construct_html_document(encoding, title, css, texts, body_attribs):
     return output
 
 
-def send_to_browser(html):
+def send_to_browser(html, browser):
     """Create a temp file containing html and open it in the default web browser."""
     tmp_html = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
     tmp_html.write(bytes(html,'UTF-8'))
     tmp_html.close()
-    desktop.open(tmp_html.name)
+    if type(browser) is str:
+        call([browser, tmp_html.name])
+    else:
+        desktop.open(tmp_html.name)
 
 
 def send_to_new_buffer(view, html):

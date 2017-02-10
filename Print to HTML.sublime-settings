@@ -52,5 +52,8 @@
     // Use this to add custom CSS rules to the output; note that using "monochrome": true may
     // override color-related custom CSS styling used here
     // "custom_css": "body { background-color: black; } .highlight * { color: white; }"
-    "custom_css": ""
+    "custom_css": "",
+
+    // Use this to choose which program you want to send the html page to
+    "browser": null
 }
